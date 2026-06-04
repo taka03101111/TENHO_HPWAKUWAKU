@@ -48,7 +48,10 @@ function pickArt(i) {
 function ThumbArt({ kind, image }) {
   if (image) {
     return (
-      <div className="more-thumb-img" style={{ backgroundImage: 'url(' + image + ')' }} />
+      <div
+        className="more-thumb-img"
+        style={{ backgroundImage: image ? 'url("' + image + '")' : undefined }}
+      />
     );
   }
   if (kind === 'orbit') {
@@ -132,10 +135,13 @@ const PROXIES = [
 ];
 
 function extractImage(node) {
-  // 1) media:thumbnail / media:content url attribute
+  // 1) media:thumbnail / media:content url attribute or text content
   const media = node.getElementsByTagName('media:thumbnail')[0]
              || node.getElementsByTagName('media:content')[0];
-  if (media && media.getAttribute('url')) return media.getAttribute('url');
+  if (media) {
+    const url = media.getAttribute('url') || media.textContent?.trim();
+    if (url) return url;
+  }
   // 2) enclosure
   const enc = node.getElementsByTagName('enclosure')[0];
   if (enc && enc.getAttribute('url')) return enc.getAttribute('url');
