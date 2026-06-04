@@ -4,10 +4,24 @@
 const COMPANY_ROWS = [
   { k: 'Company',        jp: '会社名',     v: '株式会社 TENHO（TENHO inc.）' },
   { k: 'Founded',        jp: '設立',       v: '2023年5月' },
-  { k: 'Representative', jp: '代表者',     v: '田村 允（代表取締役）' },
+  { k: 'Representative', jp: '代表者',     v: '代表取締役　田村 允 ／ 土田 龍矢' },
   { k: 'Capital',        jp: '資本金',     v: '1,000万円' },
-  { k: 'Address',        jp: '所在地',     v: '〒150-0045　東京都渋谷区神泉町10-10 アシジ神泉ビル10F' },
-  { k: 'Business',       jp: '事業内容',   v: '生成AI導入支援・研修事業 ／ AIアプリケーション開発' },
+  {
+    k: 'Address', jp: '所在地',
+    v: (
+      <span className="company-addr">
+        <span className="company-addr__row">
+          <span className="company-addr__label">東京</span>
+          〒150-0045　東京都渋谷区神泉町10-10 アシジ神泉ビル10F
+        </span>
+        <span className="company-addr__row">
+          <span className="company-addr__label">名古屋</span>
+          〒466-0064　愛知県名古屋市昭和区鶴舞1丁目2番32号 STATION Ai内
+        </span>
+      </span>
+    ),
+  },
+  { k: 'Business',       jp: '事業内容',   v: '生成AI内製化支援 ／ AIアプリケーション開発' },
 ];
 
 function Company() {
@@ -41,7 +55,7 @@ function Company() {
 
         <div className="company-footer">
           <div className="brand">
-            <img src="assets/TENHO-logo-black.png" alt="TENHO" />
+            <img src={(window.__resources && window.__resources.logoBlack) || "assets/TENHO-logo-black.png"} alt="TENHO" />
             <p>Manufacturing × AI × Future</p>
           </div>
           <div className="copyright">

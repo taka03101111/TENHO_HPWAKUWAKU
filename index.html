@@ -9,8 +9,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/site.css">
+<meta name="ext-resource-dependency" content="assets/TENHO-logo-black.png" data-resource-id="logoBlack" />
 </head>
 <body data-screen-label="TENHO Homepage">
+
+<template id="__bundler_thumbnail" data-bg-color="#ffffff">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#ffffff"/>
+    <ellipse cx="600" cy="400" rx="360" ry="210" fill="none" stroke="#BEDCFF" stroke-width="3"/>
+    <ellipse cx="600" cy="400" rx="240" ry="140" fill="none" stroke="#6FA8DC" stroke-width="2" opacity="0.5"/>
+    <text x="600" y="430" text-anchor="middle" font-family="Geist, sans-serif" font-weight="700" font-size="120" letter-spacing="8" fill="#0E0E0E">TENHO</text>
+    <circle cx="290" cy="250" r="5" fill="#6FA8DC"/>
+    <circle cx="910" cy="540" r="5" fill="#6FA8DC"/>
+    <circle cx="840" cy="230" r="4" fill="#0E0E0E" opacity="0.4"/>
+  </svg>
+</template>
 
 <div id="root"></div>
 
@@ -25,6 +38,7 @@
 <script type="text/babel" src="components/How.jsx"></script>
 <script type="text/babel" src="components/WhyNow.jsx"></script>
 <script type="text/babel" src="components/WhyTenho.jsx"></script>
+<script type="text/babel" src="components/WhatMockups.jsx"></script>
 <script type="text/babel" src="components/What.jsx"></script>
 <script type="text/babel" src="components/More.jsx"></script>
 <script type="text/babel" src="components/Contact.jsx"></script>
