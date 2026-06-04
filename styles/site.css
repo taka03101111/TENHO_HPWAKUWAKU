@@ -1803,8 +1803,10 @@ section {
 .more-thumb-img {
   position: absolute;
   inset: 0;
+  /* Fill the thumbnail while preserving the image's top edge */
   background-size: cover;
-  background-position: center;
+  background-repeat: no-repeat;
+  background-position: center top;
   background-color: var(--hai-4);
 }
 
