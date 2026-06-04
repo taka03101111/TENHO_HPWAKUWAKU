@@ -1805,7 +1805,7 @@ section {
   inset: 0;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center top;
   background-color: var(--hai-4);
 }
 
