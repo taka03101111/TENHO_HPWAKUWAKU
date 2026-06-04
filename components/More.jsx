@@ -176,6 +176,52 @@ function getFirstImageFromHtml(html) {
   }
 }
 
+async function fetchOgImageFromPage(url) {
+  for (const build of PROXIES) {
+    try {
+      const res = await fetch(build(url));
+      if (!res.ok) continue;
+      const text = await res.text();
+      const doc = new DOMParser().parseFromString(text, 'text/html');
+      const meta = doc.querySelector('meta[property="og:image"]')
+        || doc.querySelector('meta[name="og:image"]')
+        || doc.querySelector('meta[name="twitter:image"]');
+      const image = meta?.getAttribute('content')?.trim();
+      if (image) return normalizeImageUrl(image);
+    } catch (e) {
+      // try next proxy
+    }
+  }
+  return null;
+}
+
+let SITE_FALLBACK = null;
+async function fetchSiteFallback() {
+  if (SITE_FALLBACK) return SITE_FALLBACK;
+  try {
+    for (const build of PROXIES) {
+      try {
+        const res = await fetch(build(NOTE_URL));
+        if (!res.ok) continue;
+        const text = await res.text();
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+        const metaImage = doc.querySelector('meta[property="og:image"]')
+          || doc.querySelector('meta[name="og:image"]')
+          || doc.querySelector('meta[name="twitter:image"]');
+        const metaTitle = doc.querySelector('meta[property="og:title"]')
+          || doc.querySelector('meta[name="og:title"]')
+          || doc.querySelector('meta[name="twitter:title"]');
+        const image = metaImage?.getAttribute('content')?.trim() || null;
+        const title = metaTitle?.getAttribute('content')?.trim() || (doc.querySelector('title') && doc.querySelector('title').textContent.trim()) || null;
+        SITE_FALLBACK = { image: image ? normalizeImageUrl(image) : null, title };
+        return SITE_FALLBACK;
+      } catch (e) { /* next proxy */ }
+    }
+  } catch (e) { /* ignore */ }
+  SITE_FALLBACK = { image: null, title: null };
+  return SITE_FALLBACK;
+}
+
 function extractImage(node) {
   const encodedNode = node.getElementsByTagName('content:encoded')[0];
   const html = (encodedNode && encodedNode.textContent)
@@ -210,19 +256,32 @@ async function fetchNoteRss() {
       const doc = new DOMParser().parseFromString(text, 'text/xml');
       const nodes = Array.from(doc.querySelectorAll('item')).slice(0, 3);
       if (!nodes.length) continue;
-      return nodes.map((n, i) => {
-        const title = (n.querySelector('title')?.textContent || '').trim();
+      const siteFallback = await fetchSiteFallback();
+      const items = [];
+      for (const [i, n] of nodes.entries()) {
+        let title = (n.querySelector('title')?.textContent || '').trim();
         const link = (n.querySelector('link')?.textContent || '').trim() || NOTE_URL;
         const pub = (n.querySelector('pubDate')?.textContent || '').trim();
-        return {
+        let image = extractImage(n);
+        if (!image) {
+          image = await fetchOgImageFromPage(link);
+        }
+        if (!image && siteFallback && siteFallback.image) {
+          image = siteFallback.image;
+        }
+        if ((!title || title.length === 0) && siteFallback && siteFallback.title) {
+          title = siteFallback.title;
+        }
+        items.push({
           date: fmtDate(pub),
           category: 'NOTE',
           title,
           link,
-          image: extractImage(n),
+          image,
           art: pickArt(i),
-        };
-      });
+        });
+      }
+      return items;
     } catch (e) { /* try next proxy */ }
   }
   return null;
