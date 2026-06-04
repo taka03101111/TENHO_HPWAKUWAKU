@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>TENHO — 製造業 × AI × 未来</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="株式会社TENHOは、製造業のための生成AI内製化と、現場主導の改善が回り続ける持続可能な製造業を支援します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/site.css">
+<style>
+  /* Print-ready overrides */
+  html, body { background: #FFFFFF; }
+  /* Make the sticky header static on the page so the first section isn't covered */
+  .site-header {
+    position: static !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #FFFFFF !important;
+    border-bottom: 1px solid var(--hai-3) !important;
+  }
+  /* Disable scroll-reveal so all content is visible immediately */
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  /* Disable infinite/loop animations */
+  .top-glow, .scroll-indicator::after { animation: none !important; }
+  .scroll-indicator { display: none !important; }
+
+  @page { size: A4; margin: 14mm 12mm; }
+
+  @media print {
+    html, body { background: #FFFFFF !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    /* Force backgrounds (dark sections) to print */
+    #why-now, #contact {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    /* Constrain each section to roughly one printed page and avoid mid-card breaks */
+    section {
+      min-height: 0 !important;
+      padding: 32px 0 !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      break-before: page;
+      page-break-before: always;
+    }
+    section:first-of-type { break-before: auto; page-break-before: auto; }
+    /* Hide site-fixed nav in print (the static one above appears once) */
+    .site-header { display: none !important; }
+
+    /* TOP — compact hero for print */
+    #top { padding: 24px 0 !important; }
+    .top-stage { height: auto !important; min-height: 0 !important; padding: 80px 24px; display: block; }
+    .top-eyebrow, .top-meta, .top-en-mark { position: static !important; opacity: 1 !important; }
+    .top-eyebrow { margin-bottom: 32px; }
+    .top-headline-h {
+      text-shadow: none !important;
+      white-space: normal !important;
+      font-size: 56px !important;
+      margin: 64px 0 !important;
+    }
+    .top-canvas, .top-glow, .top-orbits { display: none !important; }
+    .top-meta { margin-top: 64px; text-align: left !important; flex-direction: row; gap: 24px; }
+
+    /* Section-head sizes — tame the giant English wordmarks */
+    .section-head .head-en { font-size: 64px !important; }
+    .section-head .head-en--inline { font-size: 56px !important; }
+    .section-head { margin-bottom: 40px !important; }
+    .section-index { position: static !important; margin-bottom: 16px; }
+
+    /* Vision */
+    .vision-body { font-size: 32px !important; }
+    .vision-body .ln { white-space: normal !important; }
+
+    /* HOW */
+    .how-layout { gap: 40px !important; }
+    .how-diagram { max-width: 380px !important; }
+    .how-node { width: 96px !important; height: 96px !important; font-size: 11px !important; }
+    .how-node.center { width: 120px !important; height: 120px !important; font-size: 14px !important; }
+    .how-headline { font-size: 36px !important; }
+
+    /* Why NOW — keep the 5 blocks on one row */
+    .now-blocks {
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 8px !important;
+      margin-top: 32px !important;
+    }
+    .now-block { padding: 16px 12px !important; }
+    .now-block__icon { width: 36px; height: 36px; }
+    .now-block__label { font-size: 14px !important; }
+    .now-block__desc { font-size: 11px !important; line-height: 1.6 !important; }
+    .now-headline { font-size: 56px !important; }
+    .now-warning { font-size: 28px !important; }
+    .now-divider { margin: 32px 0 !important; }
+
+    /* Why TENHO — keep 3 cards on one row */
+    .tenho-3grid { grid-template-columns: repeat(3, 1fr) !important; gap: 12px !important; }
+    .tenho-3card { padding: 24px 20px !important; }
+    .tenho-3card__title { font-size: 18px !important; }
+    .tenho-3card__desc { font-size: 12px !important; line-height: 1.7 !important; }
+    .tenho-3card__top .num { font-size: 36px !important; }
+
+    /* WHAT — both pillars stacked, each pillar internal 2-col */
+    .what-pillars { gap: 16px !important; }
+    .what-pillar { padding: 24px !important; grid-template-columns: 240px 1fr !important; gap: 32px !important; break-inside: avoid; }
+    .what-pillar__head { position: static !important; }
+    .what-pillar__name { font-size: 26px !important; }
+    .what-pillar__items { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+    .what-item__desc { font-size: 12px !important; line-height: 1.7 !important; }
+
+    /* WHAT (redesigned) */
+    #what { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .what2-head { grid-template-columns: 1.4fr 1fr !important; gap: 32px !important; margin-bottom: 32px !important; }
+    .what2-head__left { grid-template-columns: auto 1fr !important; gap: 32px !important; }
+    .what2-head__title .head-en { font-size: 72px !important; }
+    .what2-hero { min-height: 160px !important; }
+    .what2-grid { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+    .what2-card { break-inside: avoid; }
+    .what2-media { height: 200px !important; }
+    .what2-media__name .big { font-size: 36px !important; }
+    .what2-service { padding: 20px 18px !important; }
+    .what2-service__desc { font-size: 11px !important; line-height: 1.6 !important; }
+
+    /* MORE — keep 3 cards on one row */
+    .more-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 12px !important; }
+    .more-card { break-inside: avoid; }
+    .more-card .more-body { padding: 16px !important; gap: 8px; }
+    .more-card .more-title { font-size: 14px !important; line-height: 1.5 !important; }
+
+    /* Contact — stack form + info to fit on one page */
+    .contact-layout { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+    .contact-headline { font-size: 40px !important; }
+    .contact-ctas { margin-top: 24px !important; }
+    .contact-cta { padding: 12px 16px !important; }
+    .contact-cta .v { font-size: 14px !important; }
+    .contact-meta { margin-top: 24px !important; }
+    .contact-form { padding: 24px !important; gap: 16px !important; }
+    .contact-form textarea { min-height: 60px !important; }
+
+    /* Company */
+    .company-table th { padding: 14px 16px 14px 0 !important; }
+    .company-table td { padding: 14px 0 !important; font-size: 13px !important; }
+    .company-footer { margin-top: 48px !important; }
+  }
+
+  /* On-screen preview: render full layout without the sticky nav */
+  body { padding-top: 0 !important; }
+</style>
+</head>
+<body data-screen-label="TENHO Homepage — Print">
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="image-slot.js"></script>
+
+<script type="text/babel" src="components/Header.jsx"></script>
+<script type="text/babel" src="components/Top.jsx"></script>
+<script type="text/babel" src="components/Vision.jsx"></script>
+<script type="text/babel" src="components/How.jsx"></script>
+<script type="text/babel" src="components/WhyNow.jsx"></script>
+<script type="text/babel" src="components/WhyTenho.jsx"></script>
+<script type="text/babel" src="components/What.jsx"></script>
+<script type="text/babel" src="components/More.jsx"></script>
+<script type="text/babel" src="components/Contact.jsx"></script>
+<script type="text/babel" src="components/Company.jsx"></script>
+
+<script type="text/babel">
+function PrintApp() {
+  // No scroll-spy / observer in print: render everything visible immediately.
+  React.useEffect(() => {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Header activeId={'top'} scrolled={true} />
+      <main>
+        <Top />
+        <Vision />
+        <How />
+        <WhyNow />
+        <WhyTenho />
+        <What />
+        <More />
+        <Contact />
+        <Company />
+      </main>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<PrintApp />);
+
+// Auto-print once fonts + Babel-transpiled scripts + a small grace period are done.
+(async () => {
+  try {
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+  } catch (e) {}
+  // Wait for all reveal elements to be marked .in (React effect ran)
+  await new Promise(r => setTimeout(r, 800));
+  window.print();
+})();
+</script>
+</body>
+</html>
