@@ -134,24 +134,33 @@ const PROXIES = [
   (u) => 'https://thingproxy.freeboard.io/fetch/' + u,
 ];
 
+function normalizeImageUrl(url) {
+  if (!url) return url;
+  const hasWidth = /(?:\?|&)width=\d+/i.test(url);
+  if (hasWidth) {
+    return url.replace(/([?&])width=\d+/i, '$1width=520');
+  }
+  return url + (url.includes('?') ? '&width=520' : '?width=520');
+}
+
 function extractImage(node) {
-  // 1) media:thumbnail / media:content url attribute or text content
+  const html = (node.getElementsByTagName('content:encoded')[0] && node.getElementsByTagName('content:encoded')[0].textContent)
+    || (node.querySelector('description') && node.querySelector('description').textContent)
+    || '';
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (m) {
+    return normalizeImageUrl(m[1]);
+  }
+  // fallback: media:thumbnail / media:content url attribute or text content
   const media = node.getElementsByTagName('media:thumbnail')[0]
              || node.getElementsByTagName('media:content')[0];
   if (media) {
     const url = media.getAttribute('url') || media.textContent?.trim();
-    if (url) return url;
+    if (url) return normalizeImageUrl(url);
   }
-  // 2) enclosure
+  // enclosure
   const enc = node.getElementsByTagName('enclosure')[0];
-  if (enc && enc.getAttribute('url')) return enc.getAttribute('url');
-  // 3) content:encoded or description HTML <img>
-  const encoded = node.getElementsByTagName('content:encoded')[0];
-  const html = (encoded && encoded.textContent)
-    || (node.querySelector('description') && node.querySelector('description').textContent)
-    || '';
-  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (m) return m[1];
+  if (enc && enc.getAttribute('url')) return normalizeImageUrl(enc.getAttribute('url'));
   return null;
 }
 
