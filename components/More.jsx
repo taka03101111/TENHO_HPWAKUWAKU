@@ -144,17 +144,33 @@ function normalizeImageUrl(url) {
   return cleaned + (cleaned.includes('?') ? '&width=520' : '?width=520');
 }
 
+function parseSrcset(srcset) {
+  if (!srcset) return null;
+  const parts = srcset.split(',').map((part) => part.trim()).filter(Boolean);
+  if (!parts.length) return null;
+  const first = parts[0].split(/\s+/)[0];
+  return first || null;
+}
+
+function getImageSrcFromElement(image) {
+  return image.getAttribute('src')
+    || image.getAttribute('data-src')
+    || image.getAttribute('data-original')
+    || image.getAttribute('data-lazy-src')
+    || image.getAttribute('data-srcset') && parseSrcset(image.getAttribute('data-srcset'))
+    || image.getAttribute('srcset') && parseSrcset(image.getAttribute('srcset'))
+    || null;
+}
+
 function getFirstImageFromHtml(html) {
   if (!html) return null;
   try {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const image = doc.querySelector('img');
-    if (!image) return null;
-    return image.getAttribute('src')
-      || image.getAttribute('data-src')
-      || image.getAttribute('data-original')
-      || image.getAttribute('data-lazy-src')
-      || null;
+    if (image) return getImageSrcFromElement(image);
+    const figureImage = doc.querySelector('figure img');
+    if (figureImage) return getImageSrcFromElement(figureImage);
+    return null;
   } catch (e) {
     return null;
   }
