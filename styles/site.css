@@ -1803,7 +1803,8 @@ section {
 .more-thumb-img {
   position: absolute;
   inset: 0;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   background-color: var(--hai-4);
 }

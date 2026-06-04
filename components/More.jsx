@@ -136,21 +136,40 @@ const PROXIES = [
 
 function normalizeImageUrl(url) {
   if (!url) return url;
-  const hasWidth = /(?:\?|&)width=\d+/i.test(url);
+  const cleaned = url.trim();
+  const hasWidth = /(?:\?|&)width=\d+/i.test(cleaned);
   if (hasWidth) {
-    return url.replace(/([?&])width=\d+/i, '$1width=520');
+    return cleaned.replace(/([?&])width=\d+/i, '$1width=520');
   }
-  return url + (url.includes('?') ? '&width=520' : '?width=520');
+  return cleaned + (cleaned.includes('?') ? '&width=520' : '?width=520');
+}
+
+function getFirstImageFromHtml(html) {
+  if (!html) return null;
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const image = doc.querySelector('img');
+    if (!image) return null;
+    return image.getAttribute('src')
+      || image.getAttribute('data-src')
+      || image.getAttribute('data-original')
+      || image.getAttribute('data-lazy-src')
+      || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 function extractImage(node) {
-  const html = (node.getElementsByTagName('content:encoded')[0] && node.getElementsByTagName('content:encoded')[0].textContent)
+  const encodedNode = node.getElementsByTagName('content:encoded')[0];
+  const html = (encodedNode && encodedNode.textContent)
     || (node.querySelector('description') && node.querySelector('description').textContent)
     || '';
-  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (m) {
-    return normalizeImageUrl(m[1]);
+  const firstImg = getFirstImageFromHtml(html);
+  if (firstImg) {
+    return normalizeImageUrl(firstImg);
   }
+
   // fallback: media:thumbnail / media:content url attribute or text content
   const media = node.getElementsByTagName('media:thumbnail')[0]
              || node.getElementsByTagName('media:content')[0];
@@ -158,6 +177,7 @@ function extractImage(node) {
     const url = media.getAttribute('url') || media.textContent?.trim();
     if (url) return normalizeImageUrl(url);
   }
+
   // enclosure
   const enc = node.getElementsByTagName('enclosure')[0];
   if (enc && enc.getAttribute('url')) return normalizeImageUrl(enc.getAttribute('url'));
