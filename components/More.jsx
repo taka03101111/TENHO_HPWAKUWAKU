@@ -7,30 +7,6 @@ const NOTE_RSS = 'https://note.com/tenho_ai/rss';
 
 const REQUEST_TIMEOUT_MS = 6000;
 
-const FALLBACK_ITEMS = [
-  {
-    date: '2025.11',
-    category: 'AWARD',
-    title: 'noteの記事を取得中です',
-    link: NOTE_URL,
-    art: 'circuit',
-  },
-  {
-    date: '2025.09',
-    category: 'CASE STUDY',
-    title: 'TENHOの最新情報をnoteから読み込みます',
-    link: NOTE_URL,
-    art: 'orbit',
-  },
-  {
-    date: '2025.07',
-    category: 'INTERNAL',
-    title: '取得できない場合はnoteページへ遷移します',
-    link: NOTE_URL,
-    art: 'grid',
-  },
-];
-
 const PROXIES = [
   (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
   (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
