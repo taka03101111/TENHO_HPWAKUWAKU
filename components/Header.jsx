@@ -2,15 +2,11 @@
 // Sticky nav with scroll-spy. Active section gets a pale blue underline.
 
 const NAV_ITEMS = [
-  { id: 'top',       num: '01', label: 'TOP' },
-  { id: 'vision',    num: '02', label: 'Vision' },
-  { id: 'how',       num: '03', label: 'HOW' },
-  { id: 'why-now',   num: '04', label: 'Why NOW' },
-  { id: 'why-tenho', num: '05', label: 'Why TENHO' },
-  { id: 'what',      num: '06', label: 'WHAT' },
-  { id: 'more',      num: '07', label: 'MORE' },
-  { id: 'contact',   num: '08', label: 'Contact' },
-  { id: 'company',   num: '09', label: 'Company' },
+  { id: 'top',     num: '01', label: 'TOP' },
+  { id: 'what',    num: '02', label: 'What' },
+  { id: 'more',    num: '03', label: 'Case' },
+  { id: 'contact', num: '04', label: 'Contact' },
+  { id: 'company', num: '05', label: 'Company' },
 ];
 
 function Header({ activeId, scrolled }) {
@@ -32,7 +28,7 @@ function Header({ activeId, scrolled }) {
           onClick={(e) => handleClick(e, 'top')}
           aria-label="TENHO"
         >
-          <img src="assets/TENHO-logo-black.png" alt="TENHO" />
+          <img src={(window.__resources && window.__resources.logoBlack) || "assets/TENHO-logo-black.png"} alt="TENHO" />
         </a>
         <nav className="site-nav" aria-label="Primary">
           {NAV_ITEMS.map((item) => (

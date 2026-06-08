@@ -5,7 +5,7 @@
    ============================================================ */
 
 /* ---------- Fonts (Google Fonts CDN) ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@300..700&family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho+B1:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@300..700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho+B1:wght@500&display=swap');
 
 :root {
   /* ---------- Brand palette (3 colors) ---------- */

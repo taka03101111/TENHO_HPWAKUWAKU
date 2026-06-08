@@ -105,7 +105,7 @@ function Top() {
         </div>
 
         <div className="top-en-mark" aria-hidden="true">
-          <img src="assets/TENHO-logo-black.png" alt="" />
+          <img src={(window.__resources && window.__resources.logoBlack) || "assets/TENHO-logo-black.png"} alt="" />
         </div>
 
         <div className="top-meta">

@@ -1,5 +1,6 @@
-// TENHO HP — WHAT (no images; text-only cards, larger readable type,
-// AI Cowork & シナプスAI link out to their landing pages)
+// TENHO HP — WHAT (white background; full-width pillars, each service is a
+// horizontal row: text on one side, a clean product UI mockup on the other.
+// 生成AI内製化支援 is text-only.)
 
 const WHAT_ICONS = {
   internalize: (
@@ -39,20 +40,22 @@ const WHAT_PILLARS = [
     num: '01',
     en: 'Academy',
     variant: 'academy',
-    sub: ['人を起点に、', 'AI活用を社内に定着させる。'],
+    sub: '人を起点に、AI活用を社内に定着させる。',
     items: [
       {
         icon: 'internalize',
         name: '生成AI内製化支援',
-        desc: '現場の課題を起点に、AI活用を“自分たちで回せる”体制をつくる。',
+        desc: '現場の課題を起点に、AI活用を“自分たちで回せる”体制を伴走でつくる。',
         tags: ['伴走', '内製化', '研修'],
+        textOnly: true,
       },
       {
         icon: 'cowork',
         name: 'AI Cowork',
-        desc: '実践型プロジェクトで、アイデアを形にし、成果へつなげる。',
+        desc: 'Slack上で秘書AI・議事録AIが稼働。日程調整から議事録・タスク抽出まで自動化する。',
         tags: ['実装', 'エージェント', '働き方'],
         link: 'https://tenho7.jp/aicowork-lp/',
+        mockup: 'cowork',
       },
     ],
   },
@@ -60,48 +63,83 @@ const WHAT_PILLARS = [
     num: '02',
     en: 'Technology',
     variant: 'tech',
-    sub: ['製品で、現場のAI活用を', 'ダイレクトに加速させる。'],
+    sub: '製品で、現場のAI活用をダイレクトに加速させる。',
     items: [
       {
         icon: 'synapse',
         name: 'シナプスAI',
-        desc: '企業向け生成AIプラットフォーム。社内文書検索からマルチモーダル対応まで。',
-        tags: ['プラットフォーム', 'マルチモーダル', 'RAG'],
+        desc: 'GPT・Claude・Geminiを切り替えられる企業向け生成AIプラットフォーム。',
+        tags: ['マルチモデル', 'RAG', 'セキュア'],
         link: 'https://tenho7.jp/synapse-lp/',
+        mockup: 'synapse',
       },
       {
         icon: 'densho',
         name: 'DENSHO AI',
-        desc: '保全業務に特化したAI。属人化を解消し、誰でも対応できる現場へ。',
+        desc: '保全業務に特化したAIアシスタント。過去トラ検索や対応手順で属人化を解消する。',
         tags: ['保全', '技能継承', 'チャット'],
+        mockup: 'densho',
       },
     ],
   },
 ];
 
-function WhatService({ it }) {
-  const inner = (
-    <React.Fragment>
-      <div className="what2-service__icon">{WHAT_ICONS[it.icon]}</div>
-      <div className="what2-service__name">
+function ServiceText({ it }) {
+  return (
+    <div className="svc-text">
+      <div className="svc-icon">{WHAT_ICONS[it.icon]}</div>
+      <div className="svc-name">
         {it.name}
-        {it.link ? <span className="what2-service__arr">↗</span> : null}
+        {it.link ? <span className="svc-arr">↗</span> : null}
       </div>
-      <div className="what2-service__desc">{it.desc}</div>
-      <div className="what2-service__tags">
+      <p className="svc-desc">{it.desc}</p>
+      <div className="svc-tags">
         {it.tags.map((t) => <span className="tag" key={t}>{t}</span>)}
       </div>
-    </React.Fragment>
+      {it.link ? <span className="svc-link">サービスを見る <span>→</span></span> : null}
+    </div>
   );
+}
+
+function ServiceRow({ it, mediaSide }) {
+  // Text-only service: a single full-width band, text laid out horizontally.
+  if (it.textOnly) {
+    return (
+      <div className="svc-row svc-row--text">
+        <div className="svc-text svc-text--wide">
+          <div className="svc-icon">{WHAT_ICONS[it.icon]}</div>
+          <div className="svc-textonly-main">
+            <div className="svc-name">{it.name}</div>
+            <p className="svc-desc">{it.desc}</p>
+          </div>
+          <div className="svc-tags">
+            {it.tags.map((t) => <span className="tag" key={t}>{t}</span>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const text = <ServiceText it={it} />;
+  const Mockup = window.WhatMockup;
+  const media = (
+    <div className="svc-media">
+      {Mockup ? <Mockup kind={it.mockup} /> : null}
+    </div>
+  );
+
+  const inner = mediaSide === 'left'
+    ? <React.Fragment>{media}{text}</React.Fragment>
+    : <React.Fragment>{text}{media}</React.Fragment>;
 
   if (it.link) {
     return (
-      <a className="what2-service is-link" href={it.link} target="_blank" rel="noopener noreferrer">
+      <a className="svc-row is-link" data-media={mediaSide} href={it.link} target="_blank" rel="noopener noreferrer">
         {inner}
       </a>
     );
   }
-  return <div className="what2-service">{inner}</div>;
+  return <div className="svc-row" data-media={mediaSide}>{inner}</div>;
 }
 
 function What() {
@@ -126,22 +164,22 @@ function What() {
           </div>
         </div>
 
-        <div className="what2-grid">
+        <div className="what3-pillars">
           {WHAT_PILLARS.map((p, pi) => (
-            <div className="what2-card reveal" data-variant={p.variant} data-delay={pi + 1} key={p.en}>
-              <div className="what2-cardhead">
-                <div className="what2-cardhead__num">{p.num}</div>
-                <div className="what2-cardhead__name">
+            <div className="what3-pillar reveal" data-variant={p.variant} data-delay={pi + 1} key={p.en}>
+              <div className="what3-pillarhead">
+                <span className="what3-pillarhead__num">{p.num}</span>
+                <div className="what3-pillarhead__name">
                   <span className="brand">TENHO</span>
                   <span className="big">{p.en}</span>
                 </div>
-                <div className="what2-cardhead__sub">
-                  {p.sub.map((s, i) => <span key={i}>{s}<br/></span>)}
-                </div>
+                <p className="what3-pillarhead__sub">{p.sub}</p>
               </div>
 
-              <div className="what2-services">
-                {p.items.map((it) => <WhatService it={it} key={it.name} />)}
+              <div className="what3-rows">
+                {p.items.map((it, ri) => (
+                  <ServiceRow it={it} mediaSide={ri % 2 === 0 ? 'right' : 'left'} key={it.name} />
+                ))}
               </div>
             </div>
           ))}

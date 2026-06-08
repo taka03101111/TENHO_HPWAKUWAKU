@@ -86,10 +86,12 @@ function WhyTenho() {
             </svg>
             受賞実績
           </span>
-          <span className="wt-award__sep"></span>
-          <span className="wt-award__item">STATION Ai AWARD 2025 受賞</span>
-          <span className="wt-award__sep"></span>
-          <span className="wt-award__item">経済産業省関連事業 採択 ほか</span>
+          <a className="wt-award__item" href="https://note.com/e_autec/n/n95ae9cc3451e" target="_blank" rel="noopener noreferrer">
+            第2回 素形材産業経営賞  — 経済産業省 製造産業局長賞 <span className="wt-award__arr">↗</span>
+          </a>
+          <a className="wt-award__item" href="https://note.com/e_autec/n/nda30f4ebe203" target="_blank" rel="noopener noreferrer">
+            第10回 ものづくり日本大賞 — 中部経済産業局長賞 <span className="wt-award__arr">↗</span>
+          </a>
         </div>
       </div>
     </section>
